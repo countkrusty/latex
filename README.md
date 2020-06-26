@@ -21,7 +21,4 @@ Always work in progress and far from finished.
 * geometry (sets geometry according to the ACS Style Guide)
 
 ## TODO
-* get lualatex to work
-* create a documentation package that prints a cheatsheet into the document (only in draft mode)
-* remove unneeded packages from preamble
-* integrate key-value options (maybe)
+* add packages for nicer display of code&verbatim
