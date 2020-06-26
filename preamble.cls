@@ -36,7 +36,7 @@ toc=index,
 
 % Add document information
 \date{\today}
-\author{Moritz Wachsmuth-Melm}
+\author{Tristan Wiessalla}
 
 %====================================================%
 %================== Basic packages ==================%
@@ -52,7 +52,7 @@ doi=true,
 url=false,
 eprint=false,
 style=numeric-comp, % Haven't decided on a style yet
-sorting=none, % Sorts in citation order, which is the only sorting method that makes sense if using numeric style
+sorting=nyt, % Sorts in citation order, which is the only sorting method that makes sense if using numeric style
 autocite=inline, % Options: plain,inline,footnote,superscript,
 hyperref=true
 ]{biblatex} % Biblatex, integrate with zotero using: https://github.com/retorquere/zotero-better-bibtex
@@ -85,7 +85,7 @@ final, % Make links, no matter if draft mode or not
 % SIUnitx %
 % =========%
 \RequirePackage[
-per-mode=reciprocal-positive-first, % Format of units (fraction or reciprocal)
+per-mode=symbol-or-fraction, % Format of units (fraction or reciprocal)
 locale=US, % Set locale
 range-units=single, % Don't repeat units in number ranges
 list-units=single, % Don't repeat units in number lists
@@ -95,16 +95,16 @@ abbreviations=true, % Load abbreviations (\mg, \mmol, \ml etc.)
 use-xspace=true, % Correct space after unit
 ]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
 % Declare custom units (mainly chemistry and biology related)
-\DeclareSIUnit{\basepair}{bp} % Basepairs
-\DeclareSIUnit{\base}{b} % Bases
-\DeclareSIUnit{\molar}{\textsc{m}} % Molarity (mol/l)
-\DeclareSIUnit{\mmolar}{\milli\molar} % Short form
-\DeclareSIUnit{\umolar}{\micro\molar} % Short form
-\DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
-\DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
-\DeclareSIUnit{\rpm}{rpm} % Rounds per minute
-\DeclareSIUnit{\hpi}{hpi} % Hours past infection
-\DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
+%%\DeclareSIUnit{\basepair}{bp} % Basepairs
+%%\DeclareSIUnit{\base}{b} % Bases
+%%\DeclareSIUnit{\molar}{\textsc{m}} % Molarity (mol/l)
+%%\DeclareSIUnit{\mmolar}{\milli\molar} % Short form
+%%\DeclareSIUnit{\umolar}{\micro\molar} % Short form
+%%\DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
+%%\DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
+%%\DeclareSIUnit{\rpm}{rpm} % Rounds per minute
+%%\DeclareSIUnit{\hpi}{hpi} % Hours past infection
+%%\DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
 
 
 %=====================%
