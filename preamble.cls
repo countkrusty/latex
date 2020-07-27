@@ -25,18 +25,21 @@
 a4paper,
 twoside,
 cleardoublepage=empty,
-titlepage,
+titlepage=firstiscover,
 toc=bibliography,
-toc=index,
+toc=listof,
 ]{scrbook}
 
 % Fix too many alphabets error
 \newcommand\hmmax{0}
 \newcommand\bmmax{0}
 
+% Numerical date format
+\usepackage[yyyy-mm-dd]{datetime} 
+
 % Add document information
 \date{\today}
-\author{Tristan Wiessalla}
+\author{Tristan Wiessalla\\geboren in Aachen}
 
 %====================================================%
 %================== Basic packages ==================%
@@ -45,14 +48,14 @@ toc=index,
 \RequirePackage[T1]{fontenc} 
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[ngerman,english]{babel}
-\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
 \RequirePackage[
 backend=biber,
 doi=true,
 url=false,
 eprint=false,
 style=numeric-comp, % Haven't decided on a style yet
-sorting=nyt, % Sorts in citation order, which is the only sorting method that makes sense if using numeric style
+citestyle=numeric-comp, 
+sorting=nyt, % changed this; I like alphabetically sorted literature lists
 autocite=inline, % Options: plain,inline,footnote,superscript,
 hyperref=true
 ]{biblatex} % Biblatex, integrate with zotero using: https://github.com/retorquere/zotero-better-bibtex
@@ -64,13 +67,15 @@ colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures)
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
+\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
+\RequirePackage{cprotect} %Allow verbatim in captions, titles etc.
 
 
 %========================%
 % Styling packages %
 %========================%
 \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
-\DeclarePrintbibliographyDefaults{title=References}
+%% \DeclarePrintbibliographyDefaults{title=References} % I don't get it to work properly
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
 \RequirePackage[onehalfspacing]{setspace}
 \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
@@ -78,8 +83,17 @@ final, % Make links, no matter if draft mode or not
 \RequirePackage[draft=false]{scrlayer-scrpage} % Nice headers and footers
 % \RequirePackage{ebgaramond-maths}
 % \RequirePackage{lmodern}
-\RequirePackage{kpfonts}
+\RequirePackage[largesmallcaps]{kpfonts}
+\RequirePackage{algpseudocode} %To output pseudocode
+\RequirePackage{algorithm}
 \acsgeometry{}
+\RequirePackage[
+chapter, % Count codeblocks per chapter, not universally
+mathescape=true, % Enable escape to math mode in code comments
+newfloat=true, % Better support for KOMA documents
+python3
+]{minted} % Verbatim with syntax highlighting for code 
+
 
 %=========%
 % SIUnitx %
@@ -90,22 +104,10 @@ locale=US, % Set locale
 range-units=single, % Don't repeat units in number ranges
 list-units=single, % Don't repeat units in number lists
 detect-all, % Apply same font settings to the number/unit as the surrounding text
-forbid-literal-units=true, % Only allow predefined units to enforce consistency
+% forbid-literal-units=true, % Only allow predefined units to enforce consistency
 abbreviations=true, % Load abbreviations (\mg, \mmol, \ml etc.)
 use-xspace=true, % Correct space after unit
 ]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
-% Declare custom units (mainly chemistry and biology related)
-%%\DeclareSIUnit{\basepair}{bp} % Basepairs
-%%\DeclareSIUnit{\base}{b} % Bases
-%%\DeclareSIUnit{\molar}{\textsc{m}} % Molarity (mol/l)
-%%\DeclareSIUnit{\mmolar}{\milli\molar} % Short form
-%%\DeclareSIUnit{\umolar}{\micro\molar} % Short form
-%%\DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
-%%\DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
-%%\DeclareSIUnit{\rpm}{rpm} % Rounds per minute
-%%\DeclareSIUnit{\hpi}{hpi} % Hours past infection
-%%\DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
-
 
 %=====================%
 % Chemistry and maths %
@@ -117,12 +119,11 @@ use-xspace=true, % Correct space after unit
 \RequirePackage{amssymb} % Math stuff (continued)
 % \RequirePackage{chemfig} % Structural formulas drawn with tikz. Not so easy to use, but looks very nice. Still looking for an easier alternative
 
-
 %=========================%
 % Floats, figures, images %
 %=========================%
 \RequirePackage[section]{placeins} % Floats can not be printed behind the next section.
-\RequirePackage{caption} % Better captions, more customisable
+\RequirePackage[labelfont={bf,sc,small}]{caption} % Better captions, more customisable
 \RequirePackage{subcaption} % Subfigures, subcaptions
 \RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
 \RequirePackage{xcolor} % Allow colored text
@@ -139,23 +140,41 @@ use-xspace=true, % Correct space after unit
 %===============%
 % Miscellaneous %
 % ===============%
-\RequirePackage[obeyFinal]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
-\AtBeginDocument{\listoftodos}
+% I do my todo list in separate org files
+%% \RequirePackage[obeyFinal]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
+%% \AtBeginDocument{\listoftodos}
 
-%=======================%
-% Consistent references %
-%=======================%
-% I could use a package like cleveref,
-% but they always throw errors for some reason
-\newcommand{\tabref}[1]{tab.~\ref{#1}}
-\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
-\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
-\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
-\newcommand{\figref}[1]{fig.~\ref{#1}}
-\newcommand{\Figref}[1]{Fig.~\ref{#1}}
-\newcommand{\figrefs}[1]{figs.~\ref{#1}}
-\newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
 
+% =======================%
+% Reference styling
+% =======================%
+\usepackage{caption}%allows for verbatim in captions
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\renewcommand{\listingname}{\textsc{~Function}}% Listings of source code are labelled 'Function'
+\renewcommand{\tableautorefname}{\textsc{~Table}}
+\renewcommand{\figureautorefname}{\textsc{~Figure}}
+\renewcommand{\partautorefname}{\textsc{~Part}}
+\renewcommand{\chapterautorefname}{\textsc{~Chapter}}
+\renewcommand{\sectionautorefname}{\textsc{~Section}}
+\renewcommand{\subsectionautorefname}{\textsc{~Subsection}}
+\renewcommand{\appendixautorefname}{\textsc{~Appendix}}
+\renewcommand{\equationautorefname}{\textsc{~Equation}}
+\renewcommand{\algorithmautorefname}{\textsc{~Algorithm}}
+
+\let\orgautoref\autoref % Matching in-text formatting of links
+\renewcommand{\autoref}[1]
+{
+  \def\tableautorefname{\textsc{Table}}%
+  \def\figureautorefname{\textsc{Figure}}%
+  \def\partautorefname{\textsc{Part}}%
+  \def\chapterautorefname{\textsc{Chapter}}%
+  \def\sectionautorefname{\textsc{Section}}%
+  \def\subsectionautorefname{\textsc{Subsection}}%
+  \def\appendixautorefname{\textsc{Appendix}}%
+  \def\equationautorefname{\textsc{Equation}}%
+  \def\algorithmautorefname{\textsc{Algorithm}}%
+  \orgautoref{#1}%
+}
 %============================================%
 % Unicode characters (mostly the greek ones) %
 %============================================%
